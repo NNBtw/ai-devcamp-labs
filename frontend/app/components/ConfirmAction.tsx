@@ -12,13 +12,14 @@ import { useCopilotAction } from "@copilotkit/react-core";
 export function ConfirmAction() {
   useCopilotAction(
     {
-      name: "adk_request_confirmation",
+      name: "adk_request_confirmation",  // ADK synthesizes exactly this call name
       description: "Approve or reject a pending tool call before it runs.",
       parameters: [
         { name: "originalFunctionCall", type: "object", attributes: [] },
         { name: "toolConfirmation", type: "object", attributes: [] },
       ],
       renderAndWaitForResponse: ({ args, status, respond }) => {
+        // ...renders Approve / Reject buttons...
         const call = (args as any)?.originalFunctionCall ?? {};
         const hint = (args as any)?.toolConfirmation?.hint as string | undefined;
         const toolName = call?.name ?? "this action";

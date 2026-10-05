@@ -20,7 +20,7 @@ const STAGES: { key: string; icon: string; label: string }[] = [
 /** Horizontal stepper mirroring the backend's pipeline_stage shared state. */
 export function StagePanel() {
   const { state } = useCoAgent<AgentState>({ name: "social_poster" });
-  const current = state?.pipeline_stage ?? "idea";
+  const current = state?.pipeline_stage ?? "idea";  // shared state, not a message
   const currentIdx = STAGES.findIndex((s) => s.key === current);
 
   return (
