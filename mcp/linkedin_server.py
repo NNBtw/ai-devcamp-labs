@@ -21,7 +21,7 @@ import httpx
 from fastmcp import FastMCP
 
 API_BASE = "https://api.linkedin.com"
-LINKEDIN_VERSION = "202506"  # Posts API versioned header, YYYYMM
+LINKEDIN_VERSION = "202609"  # Posts API versioned header, YYYYMM
 
 logging.basicConfig(stream=sys.stderr, level=logging.INFO, format="[linkedin-mcp] %(message)s")
 log = logging.getLogger(__name__)
