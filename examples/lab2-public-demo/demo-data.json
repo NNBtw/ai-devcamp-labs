@@ -1,0 +1,1173 @@
+{
+  "format": "lab2-anonymized-demo-v1",
+  "notice": "Derived from reviewed lab records. Preferences are synthetic test fixtures; posting workflows were real lab interactions in DRY_RUN mode. Nothing was published to LinkedIn. This is not a restorable backup.",
+  "counts": {
+    "memories": 5,
+    "sessions": 3,
+    "session_events": 46
+  },
+  "memories": [
+    {
+      "id": "M001",
+      "synthetic": true,
+      "fact": "I prefer Traditional Chinese explanations and Python examples.",
+      "scope": {
+        "app_name": "lab2_runtime_memory_canary",
+        "user_id": "demo-runtime-canary-user"
+      },
+      "topics": [
+        {
+          "managedMemoryTopic": "USER_PREFERENCES"
+        }
+      ],
+      "memoryType": "NATURAL_LANGUAGE_COLLECTION"
+    },
+    {
+      "id": "M002",
+      "synthetic": true,
+      "fact": "I prefer programming examples to be in Python.",
+      "scope": {
+        "app_name": "lab2_memory_canary",
+        "user_id": "demo-canary-user"
+      },
+      "topics": [
+        {
+          "managedMemoryTopic": "USER_PREFERENCES"
+        }
+      ],
+      "memoryType": "NATURAL_LANGUAGE_COLLECTION"
+    },
+    {
+      "id": "M003",
+      "synthetic": true,
+      "fact": "I prefer explanations to be in Traditional Chinese.",
+      "scope": {
+        "app_name": "lab2_memory_canary",
+        "user_id": "demo-canary-user"
+      },
+      "topics": [
+        {
+          "managedMemoryTopic": "USER_PREFERENCES"
+        }
+      ],
+      "memoryType": "NATURAL_LANGUAGE_COLLECTION"
+    },
+    {
+      "id": "M004",
+      "synthetic": true,
+      "fact": "My preferred fictional project name is Canary DEMO.",
+      "scope": {
+        "app_name": "lab2_memory_canary",
+        "user_id": "demo-canary-user"
+      },
+      "topics": [
+        {
+          "managedMemoryTopic": "USER_PREFERENCES"
+        }
+      ],
+      "memoryType": "NATURAL_LANGUAGE_COLLECTION"
+    },
+    {
+      "id": "M005",
+      "synthetic": true,
+      "fact": "For my synthetic Lab 2 test account, I prefer LinkedIn posts to be concise, technical, written without hashtags, and to end with the phrase 'Signal over noise'.",
+      "scope": {
+        "app_name": "lab2_memory_isolation_test",
+        "user_id": "demo-memory-test-user"
+      },
+      "topics": [
+        {
+          "managedMemoryTopic": "USER_PREFERENCES"
+        },
+        {
+          "customMemoryTopicLabel": "posting_style"
+        }
+      ],
+      "memoryType": "NATURAL_LANGUAGE_COLLECTION"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "S001",
+      "scenario": "Python debugging post: approval and simulated publication",
+      "user_id": "demo-user",
+      "state": {
+        "_ag_ui_thread_id": "demo-uuid-011",
+        "_ag_ui_app_name": "social_poster",
+        "_ag_ui_user_id": "demo-user",
+        "pipeline_stage": "simulated",
+        "research_notes": "Debugging is one of the most essential skills for a programmer. For beginners, encountering errors can feel frustrating, but approaching them systematically turns guesswork into a logical puzzle-solving process. \n\nThe systematic steps for debugging Python errors range from analyzing native error messages to utilizing interactive tools and conceptual troubleshooting techniques.\n\n---\n\n### Step 1: Read and Decode the Traceback (The Map)\nWhen a Python script crashes, it outputs a **traceback** (an error message stack). Beginners often ignore these because they look intimidating, but they act like a roadmap pointing directly to the problem.\n\n* **Read from the bottom up:** The actual error type and description appear on the very last line (e.g., `ZeroDivisionError`, `TypeError`, `NameError`). \n* **Find the file and line number:** Working your way up from the bottom, look for `File \"...\", line X, in <module>` or function name. This tells you the exact line where the execution failed.\n* **Identify the error type:**\n  * `SyntaxError` / `IndentationError`: Code structure is wrong (missing colon `:`, bad spacing). Look *just above* the flagged line.\n  * `NameError`: You used a variable or function name that Python doesn't recognize (usually a typo or missing variable assignment).\n  * `TypeError`: You performed an operation on incompatible data types (e.g., trying to add a `string` to an `integer`).\n\n---\n\n### Step 2: Print Debugging (The Quick Inspection)\nIf your code runs without crashing, but the output is wrong (a **logical error**), or if you want to inspect a variable's value right before a crash, use `print()` statements.\n\n* **What to print:** Print out the values *and* the data types of variables leading up to the failure point.\n  ```python\n  print(f\"DEBUG: x is {x}, type is {type(x)}\")\n  ```\n* **Check the control flow:** Place print statements inside loops or conditional (`if/else`) branches to confirm whether those blocks of code are actually executing.\n* *Note:* Clean up your print statements once you find the bug so they don't clutter your terminal output.\n\n---\n\n### Step 3: Interactive Debugging with `pdb` (The Surgical Tool)\nWhen `print()` statements become too messy, or you need to examine deeply nested code, use Python’s built-in interactive debugger: **`pdb`**.\n\n* **Setting a breakpoint:** Insert `breakpoint()` (or `import pdb; pdb.set_trace()` in older Python versions) right before the troublesome line. When Python hits this line, execution pauses, and an interactive `(Pdb)` prompt appears.\n* **Essential `pdb` commands:**\n  * **`p` or `pp` (Print):** Evaluate and print the value of a variable or expression (e.g., `p my_var`).\n  * **`n` (Next):** Execute the next line of code in the current file (steps *over* functions).\n  * **`s` (Step):** Step *into* the function called on the current line.\n  * **`c` (Continue):** Resume normal program execution until the next breakpoint or crash.\n  * **`q` (Quit):** Exit the debugger immediately.\n\n---\n\n### Step 4: Rubber Duck Debugging (The Mental Reset)\nIf the code looks syntactically correct and the debugger isn't yielding answers, the issue is often a flawed assumption in your logic. \n\n* **The Process:** Explain your code line-by-line out loud to an inanimate object (like a rubber duck, a stuffed animal, or an empty chair) as if you were teaching it to a beginner. \n* **Why it works:** Articulating your code forces your brain to slow down and actually read what is written, rather than what you *think* you wrote. Inevitably, you will hear yourself say something like, *\"And then the user input gets saved here, except... wait, I passed the wrong variable name into that function!\"*\n\n---\n\n### Summary Checklist for Beginners\n1. **Did it crash?** Read the **traceback** from bottom to top to find the exact line number and error type.\n2. **Is a variable behaving weirdly?** Drop a strategic `print()` or `type()` check to see its contents.\n3. **Do you need granular control?** Drop a `breakpoint()` and use `pdb` to step through line-by-line.\n4. **Are you completely stuck in circles?** Step away from the screen, talk through the logic out loud (**Rubber Duck**), or isolate the broken section into a small, standalone test script.",
+        "_adk_activated_skill_draft_agent": [
+          "post-formatter",
+          "platform-style",
+          "brand-voice",
+          "poster-style"
+        ],
+        "current_image_path": "/demo/images/python-debugging.png",
+        "current_image_display_url": "https://example.invalid/lab2/images/python-debugging.png",
+        "current_image_url": null,
+        "current_draft": "Why does a single red error message make us feel like we have failed as programmers? We have all been there, staring at a screen in frustration whilst trying to guess what went wrong. Fortunately, debugging is a systematic skill you can easily learn, converting that initial frustration into a highly satisfying puzzle.\n\nYou can isolate and resolve almost any Python error by using three simple, practical techniques. First, read your traceback from the bottom up to find the exact line and error type. Second, use print() or breakpoint() to inspect active variables, and third, explain your code out loud to a rubber duck to spot logical gaps.\n\nWhat is your go-to method for solving a stubborn coding bug?\n\n#Python #Debugging #CodingTips #SoftwareEngineering #TechEducation\n\n---\n**Image Path**: `/demo/images/python-debugging.png`\n**Image URL**: `https://example.invalid/lab2/images/python-debugging.png`",
+        "pending_tool_calls": []
+      },
+      "events": [
+        {
+          "id": "S001-E001",
+          "sequence": 1,
+          "author": "user",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Create a short English LinkedIn post about learning to debug Python errors systematically, with a simple illustration. Use the LinkedIn publisher and request tool confirmation before execution. The backend is configured with DRY_RUN=true; complete the simulated posting only after I approve."
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-026",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E002",
+          "sequence": 2,
+          "author": "social_poster",
+          "content": {},
+          "invocation_id": "e-demo-uuid-026",
+          "actions": {
+            "stateDelta": {
+              "pipeline_stage": "idea"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E003",
+          "sequence": 3,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "functionCall": {
+                  "name": "load_memory",
+                  "args": {
+                    "query": "user preferences and previous posts"
+                  },
+                  "id": "demo-call-003"
+                }
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-026",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E004",
+          "sequence": 4,
+          "author": "social_poster",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "functionResponse": {
+                  "name": "load_memory",
+                  "response": {
+                    "result": {
+                      "memories": []
+                    }
+                  },
+                  "id": "demo-call-003"
+                }
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-026",
+          "actions": {
+            "stateDelta": {
+              "pipeline_stage": "consulting_memory"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E005",
+          "sequence": 5,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "functionCall": {
+                  "name": "research_agent",
+                  "args": {
+                    "request": "Systematic steps for debugging Python errors for beginners (e.g., traceback reading, pdb, print debugging, rubber duck debugging)"
+                  },
+                  "id": "demo-call-007"
+                }
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-026",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E006",
+          "sequence": 6,
+          "author": "social_poster",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "functionResponse": {
+                  "name": "research_agent",
+                  "response": {
+                    "result": "Debugging is one of the most essential skills for a programmer. For beginners, encountering errors can feel frustrating, but approaching them systematically turns guesswork into a logical puzzle-solving process. \n\nThe systematic steps for debugging Python errors range from analyzing native error messages to utilizing interactive tools and conceptual troubleshooting techniques.\n\n---\n\n### Step 1: Read and Decode the Traceback (The Map)\nWhen a Python script crashes, it outputs a **traceback** (an error message stack). Beginners often ignore these because they look intimidating, but they act like a roadmap pointing directly to the problem.\n\n* **Read from the bottom up:** The actual error type and description appear on the very last line (e.g., `ZeroDivisionError`, `TypeError`, `NameError`). \n* **Find the file and line number:** Working your way up from the bottom, look for `File \"...\", line X, in <module>` or function name. This tells you the exact line where the execution failed.\n* **Identify the error type:**\n  * `SyntaxError` / `IndentationError`: Code structure is wrong (missing colon `:`, bad spacing). Look *just above* the flagged line.\n  * `NameError`: You used a variable or function name that Python doesn't recognize (usually a typo or missing variable assignment).\n  * `TypeError`: You performed an operation on incompatible data types (e.g., trying to add a `string` to an `integer`).\n\n---\n\n### Step 2: Print Debugging (The Quick Inspection)\nIf your code runs without crashing, but the output is wrong (a **logical error**), or if you want to inspect a variable's value right before a crash, use `print()` statements.\n\n* **What to print:** Print out the values *and* the data types of variables leading up to the failure point.\n  ```python\n  print(f\"DEBUG: x is {x}, type is {type(x)}\")\n  ```\n* **Check the control flow:** Place print statements inside loops or conditional (`if/else`) branches to confirm whether those blocks of code are actually executing.\n* *Note:* Clean up your print statements once you find the bug so they don't clutter your terminal output.\n\n---\n\n### Step 3: Interactive Debugging with `pdb` (The Surgical Tool)\nWhen `print()` statements become too messy, or you need to examine deeply nested code, use Python’s built-in interactive debugger: **`pdb`**.\n\n* **Setting a breakpoint:** Insert `breakpoint()` (or `import pdb; pdb.set_trace()` in older Python versions) right before the troublesome line. When Python hits this line, execution pauses, and an interactive `(Pdb)` prompt appears.\n* **Essential `pdb` commands:**\n  * **`p` or `pp` (Print):** Evaluate and print the value of a variable or expression (e.g., `p my_var`).\n  * **`n` (Next):** Execute the next line of code in the current file (steps *over* functions).\n  * **`s` (Step):** Step *into* the function called on the current line.\n  * **`c` (Continue):** Resume normal program execution until the next breakpoint or crash.\n  * **`q` (Quit):** Exit the debugger immediately.\n\n---\n\n### Step 4: Rubber Duck Debugging (The Mental Reset)\nIf the code looks syntactically correct and the debugger isn't yielding answers, the issue is often a flawed assumption in your logic. \n\n* **The Process:** Explain your code line-by-line out loud to an inanimate object (like a rubber duck, a stuffed animal, or an empty chair) as if you were teaching it to a beginner. \n* **Why it works:** Articulating your code forces your brain to slow down and actually read what is written, rather than what you *think* you wrote. Inevitably, you will hear yourself say something like, *\"And then the user input gets saved here, except... wait, I passed the wrong variable name into that function!\"*\n\n---\n\n### Summary Checklist for Beginners\n1. **Did it crash?** Read the **traceback** from bottom to top to find the exact line number and error type.\n2. **Is a variable behaving weirdly?** Drop a strategic `print()` or `type()` check to see its contents.\n3. **Do you need granular control?** Drop a `breakpoint()` and use `pdb` to step through line-by-line.\n4. **Are you completely stuck in circles?** Step away from the screen, talk through the logic out loud (**Rubber Duck**), or isolate the broken section into a small, standalone test script."
+                  },
+                  "id": "demo-call-007"
+                }
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-026",
+          "actions": {
+            "stateDelta": {
+              "research_notes": "Debugging is one of the most essential skills for a programmer. For beginners, encountering errors can feel frustrating, but approaching them systematically turns guesswork into a logical puzzle-solving process. \n\nThe systematic steps for debugging Python errors range from analyzing native error messages to utilizing interactive tools and conceptual troubleshooting techniques.\n\n---\n\n### Step 1: Read and Decode the Traceback (The Map)\nWhen a Python script crashes, it outputs a **traceback** (an error message stack). Beginners often ignore these because they look intimidating, but they act like a roadmap pointing directly to the problem.\n\n* **Read from the bottom up:** The actual error type and description appear on the very last line (e.g., `ZeroDivisionError`, `TypeError`, `NameError`). \n* **Find the file and line number:** Working your way up from the bottom, look for `File \"...\", line X, in <module>` or function name. This tells you the exact line where the execution failed.\n* **Identify the error type:**\n  * `SyntaxError` / `IndentationError`: Code structure is wrong (missing colon `:`, bad spacing). Look *just above* the flagged line.\n  * `NameError`: You used a variable or function name that Python doesn't recognize (usually a typo or missing variable assignment).\n  * `TypeError`: You performed an operation on incompatible data types (e.g., trying to add a `string` to an `integer`).\n\n---\n\n### Step 2: Print Debugging (The Quick Inspection)\nIf your code runs without crashing, but the output is wrong (a **logical error**), or if you want to inspect a variable's value right before a crash, use `print()` statements.\n\n* **What to print:** Print out the values *and* the data types of variables leading up to the failure point.\n  ```python\n  print(f\"DEBUG: x is {x}, type is {type(x)}\")\n  ```\n* **Check the control flow:** Place print statements inside loops or conditional (`if/else`) branches to confirm whether those blocks of code are actually executing.\n* *Note:* Clean up your print statements once you find the bug so they don't clutter your terminal output.\n\n---\n\n### Step 3: Interactive Debugging with `pdb` (The Surgical Tool)\nWhen `print()` statements become too messy, or you need to examine deeply nested code, use Python’s built-in interactive debugger: **`pdb`**.\n\n* **Setting a breakpoint:** Insert `breakpoint()` (or `import pdb; pdb.set_trace()` in older Python versions) right before the troublesome line. When Python hits this line, execution pauses, and an interactive `(Pdb)` prompt appears.\n* **Essential `pdb` commands:**\n  * **`p` or `pp` (Print):** Evaluate and print the value of a variable or expression (e.g., `p my_var`).\n  * **`n` (Next):** Execute the next line of code in the current file (steps *over* functions).\n  * **`s` (Step):** Step *into* the function called on the current line.\n  * **`c` (Continue):** Resume normal program execution until the next breakpoint or crash.\n  * **`q` (Quit):** Exit the debugger immediately.\n\n---\n\n### Step 4: Rubber Duck Debugging (The Mental Reset)\nIf the code looks syntactically correct and the debugger isn't yielding answers, the issue is often a flawed assumption in your logic. \n\n* **The Process:** Explain your code line-by-line out loud to an inanimate object (like a rubber duck, a stuffed animal, or an empty chair) as if you were teaching it to a beginner. \n* **Why it works:** Articulating your code forces your brain to slow down and actually read what is written, rather than what you *think* you wrote. Inevitably, you will hear yourself say something like, *\"And then the user input gets saved here, except... wait, I passed the wrong variable name into that function!\"*\n\n---\n\n### Summary Checklist for Beginners\n1. **Did it crash?** Read the **traceback** from bottom to top to find the exact line number and error type.\n2. **Is a variable behaving weirdly?** Drop a strategic `print()` or `type()` check to see its contents.\n3. **Do you need granular control?** Drop a `breakpoint()` and use `pdb` to step through line-by-line.\n4. **Are you completely stuck in circles?** Step away from the screen, talk through the logic out loud (**Rubber Duck**), or isolate the broken section into a small, standalone test script.",
+              "pipeline_stage": "researching"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E007",
+          "sequence": 7,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "functionCall": {
+                  "name": "draft_agent",
+                  "args": {
+                    "request": "Create a short English LinkedIn post about learning to debug Python errors systematically. Include:\n1. Empathy with beginners experiencing bugs.\n2. 3 simple, actionable steps: Read traceback bottom-up, Use print() or breakpoint() to inspect, and Rubber duck debugging.\n3. Clean, professional hashtags suitable for LinkedIn.\n4. An illustration suggestion and call the image generation to create a simple, clean, professional illustration of a rubber duck next to a laptop with Python code on screen. Keep the style modern, minimalist, and engaging.\n\nProvide the post draft text, hashtags, and make sure to generate the image."
+                  },
+                  "id": "demo-call-008"
+                }
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-026",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E008",
+          "sequence": 8,
+          "author": "social_poster",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "functionResponse": {
+                  "name": "draft_agent",
+                  "response": {
+                    "result": "Why does a single red error message make us feel like we have failed as programmers? We have all been there, staring at a screen in frustration whilst trying to guess what went wrong. Fortunately, debugging is a systematic skill you can easily learn, converting that initial frustration into a highly satisfying puzzle.\n\nYou can isolate and resolve almost any Python error by using three simple, practical techniques. First, read your traceback from the bottom up to find the exact line and error type. Second, use print() or breakpoint() to inspect active variables, and third, explain your code out loud to a rubber duck to spot logical gaps.\n\nWhat is your go-to method for solving a stubborn coding bug?\n\n#Python #Debugging #CodingTips #SoftwareEngineering #TechEducation\n\n---\n**Image Path**: `/demo/images/python-debugging.png`\n**Image URL**: `https://example.invalid/lab2/images/python-debugging.png`"
+                  },
+                  "id": "demo-call-008"
+                }
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-026",
+          "actions": {
+            "stateDelta": {
+              "_adk_activated_skill_draft_agent": [
+                "post-formatter",
+                "platform-style",
+                "brand-voice",
+                "poster-style"
+              ],
+              "current_image_path": "/demo/images/python-debugging.png",
+              "current_image_display_url": "https://example.invalid/lab2/images/python-debugging.png",
+              "current_image_url": null,
+              "current_draft": "Why does a single red error message make us feel like we have failed as programmers? We have all been there, staring at a screen in frustration whilst trying to guess what went wrong. Fortunately, debugging is a systematic skill you can easily learn, converting that initial frustration into a highly satisfying puzzle.\n\nYou can isolate and resolve almost any Python error by using three simple, practical techniques. First, read your traceback from the bottom up to find the exact line and error type. Second, use print() or breakpoint() to inspect active variables, and third, explain your code out loud to a rubber duck to spot logical gaps.\n\nWhat is your go-to method for solving a stubborn coding bug?\n\n#Python #Debugging #CodingTips #SoftwareEngineering #TechEducation\n\n---\n**Image Path**: `/demo/images/python-debugging.png`\n**Image URL**: `https://example.invalid/lab2/images/python-debugging.png`",
+              "pipeline_stage": "drafting"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E009",
+          "sequence": 9,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "Here is the draft for your LinkedIn post:\n\nWhy does a single red error message make us feel like we have failed as programmers? We have all been there, staring at a screen in frustration whilst trying to guess what went wrong. Fortunately, debugging is a systematic skill you can easily learn, converting that initial frustration into a highly satisfying puzzle.\n\nYou can isolate and resolve almost any Python error by using three simple, practical techniques. First, read your traceback from the bottom up to find the exact line and error type. Second, use print() or breakpoint() to inspect active variables, and third, explain your code out loud to a rubber duck to spot logical gaps.\n\nWhat is your go-to method for solving a stubborn coding bug?\n\n#Python #Debugging #CodingTips #SoftwareEngineering #TechEducation\n\n![post image](https://example.invalid/lab2/images/python-debugging.png)\n\n***\n\nPlease review the draft and the illustration. If you approve, let me know and I will proceed with publishing it to LinkedIn!"
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-026",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E010",
+          "sequence": 10,
+          "author": "social_poster",
+          "content": {},
+          "invocation_id": "e-demo-uuid-026",
+          "actions": {
+            "stateDelta": {
+              "pipeline_stage": "awaiting_approval"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E011",
+          "sequence": 11,
+          "author": "user",
+          "content": {},
+          "invocation_id": "demo-state-update-006",
+          "actions": {
+            "stateDelta": {
+              "pipeline_stage": "awaiting_approval",
+              "research_notes": "Debugging is one of the most essential skills for a programmer. For beginners, encountering errors can feel frustrating, but approaching them systematically turns guesswork into a logical puzzle-solving process. \n\nThe systematic steps for debugging Python errors range from analyzing native error messages to utilizing interactive tools and conceptual troubleshooting techniques.\n\n---\n\n### Step 1: Read and Decode the Traceback (The Map)\nWhen a Python script crashes, it outputs a **traceback** (an error message stack). Beginners often ignore these because they look intimidating, but they act like a roadmap pointing directly to the problem.\n\n* **Read from the bottom up:** The actual error type and description appear on the very last line (e.g., `ZeroDivisionError`, `TypeError`, `NameError`). \n* **Find the file and line number:** Working your way up from the bottom, look for `File \"...\", line X, in <module>` or function name. This tells you the exact line where the execution failed.\n* **Identify the error type:**\n  * `SyntaxError` / `IndentationError`: Code structure is wrong (missing colon `:`, bad spacing). Look *just above* the flagged line.\n  * `NameError`: You used a variable or function name that Python doesn't recognize (usually a typo or missing variable assignment).\n  * `TypeError`: You performed an operation on incompatible data types (e.g., trying to add a `string` to an `integer`).\n\n---\n\n### Step 2: Print Debugging (The Quick Inspection)\nIf your code runs without crashing, but the output is wrong (a **logical error**), or if you want to inspect a variable's value right before a crash, use `print()` statements.\n\n* **What to print:** Print out the values *and* the data types of variables leading up to the failure point.\n  ```python\n  print(f\"DEBUG: x is {x}, type is {type(x)}\")\n  ```\n* **Check the control flow:** Place print statements inside loops or conditional (`if/else`) branches to confirm whether those blocks of code are actually executing.\n* *Note:* Clean up your print statements once you find the bug so they don't clutter your terminal output.\n\n---\n\n### Step 3: Interactive Debugging with `pdb` (The Surgical Tool)\nWhen `print()` statements become too messy, or you need to examine deeply nested code, use Python’s built-in interactive debugger: **`pdb`**.\n\n* **Setting a breakpoint:** Insert `breakpoint()` (or `import pdb; pdb.set_trace()` in older Python versions) right before the troublesome line. When Python hits this line, execution pauses, and an interactive `(Pdb)` prompt appears.\n* **Essential `pdb` commands:**\n  * **`p` or `pp` (Print):** Evaluate and print the value of a variable or expression (e.g., `p my_var`).\n  * **`n` (Next):** Execute the next line of code in the current file (steps *over* functions).\n  * **`s` (Step):** Step *into* the function called on the current line.\n  * **`c` (Continue):** Resume normal program execution until the next breakpoint or crash.\n  * **`q` (Quit):** Exit the debugger immediately.\n\n---\n\n### Step 4: Rubber Duck Debugging (The Mental Reset)\nIf the code looks syntactically correct and the debugger isn't yielding answers, the issue is often a flawed assumption in your logic. \n\n* **The Process:** Explain your code line-by-line out loud to an inanimate object (like a rubber duck, a stuffed animal, or an empty chair) as if you were teaching it to a beginner. \n* **Why it works:** Articulating your code forces your brain to slow down and actually read what is written, rather than what you *think* you wrote. Inevitably, you will hear yourself say something like, *\"And then the user input gets saved here, except... wait, I passed the wrong variable name into that function!\"*\n\n---\n\n### Summary Checklist for Beginners\n1. **Did it crash?** Read the **traceback** from bottom to top to find the exact line number and error type.\n2. **Is a variable behaving weirdly?** Drop a strategic `print()` or `type()` check to see its contents.\n3. **Do you need granular control?** Drop a `breakpoint()` and use `pdb` to step through line-by-line.\n4. **Are you completely stuck in circles?** Step away from the screen, talk through the logic out loud (**Rubber Duck**), or isolate the broken section into a small, standalone test script.",
+              "_adk_activated_skill_draft_agent": [
+                "post-formatter",
+                "platform-style",
+                "brand-voice",
+                "poster-style"
+              ],
+              "current_image_path": "/demo/images/python-debugging.png",
+              "current_image_display_url": "https://example.invalid/lab2/images/python-debugging.png",
+              "current_image_url": null,
+              "current_draft": "Why does a single red error message make us feel like we have failed as programmers? We have all been there, staring at a screen in frustration whilst trying to guess what went wrong. Fortunately, debugging is a systematic skill you can easily learn, converting that initial frustration into a highly satisfying puzzle.\n\nYou can isolate and resolve almost any Python error by using three simple, practical techniques. First, read your traceback from the bottom up to find the exact line and error type. Second, use print() or breakpoint() to inspect active variables, and third, explain your code out loud to a rubber duck to spot logical gaps.\n\nWhat is your go-to method for solving a stubborn coding bug?\n\n#Python #Debugging #CodingTips #SoftwareEngineering #TechEducation\n\n---\n**Image Path**: `/demo/images/python-debugging.png`\n**Image URL**: `https://example.invalid/lab2/images/python-debugging.png`"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E012",
+          "sequence": 12,
+          "author": "user",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "The draft and illustration look good. Reuse this exact draft and the existing image_path. Call linkedin_create_post now so the framework can request tool confirmation. Keep DRY_RUN=true; I will approve execution using the Approve/Reject card. Do not regenerate the draft or illustration."
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-016",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E013",
+          "sequence": 13,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "functionCall": {
+                  "name": "linkedin_create_post",
+                  "args": {
+                    "text": "Why does a single red error message make us feel like we have failed as programmers? We have all been there, staring at a screen in frustration whilst trying to guess what went wrong. Fortunately, debugging is a systematic skill you can easily learn, converting that initial frustration into a highly satisfying puzzle.\n\nYou can isolate and resolve almost any Python error by using three simple, practical techniques. First, read your traceback from the bottom up to find the exact line and error type. Second, use print() or breakpoint() to inspect active variables, and third, explain your code out loud to a rubber duck to spot logical gaps.\n\nWhat is your go-to method for solving a stubborn coding bug?\n\n#Python #Debugging #CodingTips #SoftwareEngineering #TechEducation",
+                    "image_path": "/demo/images/python-debugging.png"
+                  },
+                  "id": "demo-call-004"
+                }
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-016",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E014",
+          "sequence": 14,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "functionCall": {
+                  "name": "adk_request_confirmation",
+                  "args": {
+                    "originalFunctionCall": {
+                      "id": "demo-call-004",
+                      "args": {
+                        "text": "Why does a single red error message make us feel like we have failed as programmers? We have all been there, staring at a screen in frustration whilst trying to guess what went wrong. Fortunately, debugging is a systematic skill you can easily learn, converting that initial frustration into a highly satisfying puzzle.\n\nYou can isolate and resolve almost any Python error by using three simple, practical techniques. First, read your traceback from the bottom up to find the exact line and error type. Second, use print() or breakpoint() to inspect active variables, and third, explain your code out loud to a rubber duck to spot logical gaps.\n\nWhat is your go-to method for solving a stubborn coding bug?\n\n#Python #Debugging #CodingTips #SoftwareEngineering #TechEducation",
+                        "image_path": "/demo/images/python-debugging.png"
+                      },
+                      "name": "linkedin_create_post"
+                    },
+                    "toolConfirmation": {
+                      "hint": "Please approve or reject the tool call linkedin_create_post() by responding with a FunctionResponse with an expected ToolConfirmation payload.",
+                      "confirmed": false
+                    }
+                  },
+                  "id": "adk-demo-uuid-049"
+                }
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-016",
+          "actions": {},
+          "event_metadata": {
+            "longRunningToolIds": [
+              "adk-demo-uuid-049"
+            ]
+          }
+        },
+        {
+          "id": "S001-E015",
+          "sequence": 15,
+          "author": "user",
+          "content": {},
+          "invocation_id": "demo-state-update-007",
+          "actions": {
+            "stateDelta": {
+              "pending_tool_calls": [
+                "adk-demo-uuid-049"
+              ]
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E016",
+          "sequence": 16,
+          "author": "user",
+          "content": {},
+          "invocation_id": "demo-state-update-008",
+          "actions": {
+            "stateDelta": {
+              "pending_tool_calls": []
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E017",
+          "sequence": 17,
+          "author": "user",
+          "content": {},
+          "invocation_id": "demo-state-update-008",
+          "actions": {
+            "stateDelta": {
+              "pipeline_stage": "awaiting_approval",
+              "research_notes": "Debugging is one of the most essential skills for a programmer. For beginners, encountering errors can feel frustrating, but approaching them systematically turns guesswork into a logical puzzle-solving process. \n\nThe systematic steps for debugging Python errors range from analyzing native error messages to utilizing interactive tools and conceptual troubleshooting techniques.\n\n---\n\n### Step 1: Read and Decode the Traceback (The Map)\nWhen a Python script crashes, it outputs a **traceback** (an error message stack). Beginners often ignore these because they look intimidating, but they act like a roadmap pointing directly to the problem.\n\n* **Read from the bottom up:** The actual error type and description appear on the very last line (e.g., `ZeroDivisionError`, `TypeError`, `NameError`). \n* **Find the file and line number:** Working your way up from the bottom, look for `File \"...\", line X, in <module>` or function name. This tells you the exact line where the execution failed.\n* **Identify the error type:**\n  * `SyntaxError` / `IndentationError`: Code structure is wrong (missing colon `:`, bad spacing). Look *just above* the flagged line.\n  * `NameError`: You used a variable or function name that Python doesn't recognize (usually a typo or missing variable assignment).\n  * `TypeError`: You performed an operation on incompatible data types (e.g., trying to add a `string` to an `integer`).\n\n---\n\n### Step 2: Print Debugging (The Quick Inspection)\nIf your code runs without crashing, but the output is wrong (a **logical error**), or if you want to inspect a variable's value right before a crash, use `print()` statements.\n\n* **What to print:** Print out the values *and* the data types of variables leading up to the failure point.\n  ```python\n  print(f\"DEBUG: x is {x}, type is {type(x)}\")\n  ```\n* **Check the control flow:** Place print statements inside loops or conditional (`if/else`) branches to confirm whether those blocks of code are actually executing.\n* *Note:* Clean up your print statements once you find the bug so they don't clutter your terminal output.\n\n---\n\n### Step 3: Interactive Debugging with `pdb` (The Surgical Tool)\nWhen `print()` statements become too messy, or you need to examine deeply nested code, use Python’s built-in interactive debugger: **`pdb`**.\n\n* **Setting a breakpoint:** Insert `breakpoint()` (or `import pdb; pdb.set_trace()` in older Python versions) right before the troublesome line. When Python hits this line, execution pauses, and an interactive `(Pdb)` prompt appears.\n* **Essential `pdb` commands:**\n  * **`p` or `pp` (Print):** Evaluate and print the value of a variable or expression (e.g., `p my_var`).\n  * **`n` (Next):** Execute the next line of code in the current file (steps *over* functions).\n  * **`s` (Step):** Step *into* the function called on the current line.\n  * **`c` (Continue):** Resume normal program execution until the next breakpoint or crash.\n  * **`q` (Quit):** Exit the debugger immediately.\n\n---\n\n### Step 4: Rubber Duck Debugging (The Mental Reset)\nIf the code looks syntactically correct and the debugger isn't yielding answers, the issue is often a flawed assumption in your logic. \n\n* **The Process:** Explain your code line-by-line out loud to an inanimate object (like a rubber duck, a stuffed animal, or an empty chair) as if you were teaching it to a beginner. \n* **Why it works:** Articulating your code forces your brain to slow down and actually read what is written, rather than what you *think* you wrote. Inevitably, you will hear yourself say something like, *\"And then the user input gets saved here, except... wait, I passed the wrong variable name into that function!\"*\n\n---\n\n### Summary Checklist for Beginners\n1. **Did it crash?** Read the **traceback** from bottom to top to find the exact line number and error type.\n2. **Is a variable behaving weirdly?** Drop a strategic `print()` or `type()` check to see its contents.\n3. **Do you need granular control?** Drop a `breakpoint()` and use `pdb` to step through line-by-line.\n4. **Are you completely stuck in circles?** Step away from the screen, talk through the logic out loud (**Rubber Duck**), or isolate the broken section into a small, standalone test script.",
+              "_adk_activated_skill_draft_agent": [
+                "post-formatter",
+                "platform-style",
+                "brand-voice",
+                "poster-style"
+              ],
+              "current_image_path": "/demo/images/python-debugging.png",
+              "current_image_display_url": "https://example.invalid/lab2/images/python-debugging.png",
+              "current_image_url": null,
+              "current_draft": "Why does a single red error message make us feel like we have failed as programmers? We have all been there, staring at a screen in frustration whilst trying to guess what went wrong. Fortunately, debugging is a systematic skill you can easily learn, converting that initial frustration into a highly satisfying puzzle.\n\nYou can isolate and resolve almost any Python error by using three simple, practical techniques. First, read your traceback from the bottom up to find the exact line and error type. Second, use print() or breakpoint() to inspect active variables, and third, explain your code out loud to a rubber duck to spot logical gaps.\n\nWhat is your go-to method for solving a stubborn coding bug?\n\n#Python #Debugging #CodingTips #SoftwareEngineering #TechEducation\n\n---\n**Image Path**: `/demo/images/python-debugging.png`\n**Image URL**: `https://example.invalid/lab2/images/python-debugging.png`"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E018",
+          "sequence": 18,
+          "author": "user",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "functionResponse": {
+                  "name": "adk_request_confirmation",
+                  "response": {
+                    "confirmed": true
+                  },
+                  "id": "adk-demo-uuid-049"
+                }
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-016",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E019",
+          "sequence": 19,
+          "author": "social_poster",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "functionResponse": {
+                  "name": "linkedin_create_post",
+                  "response": {
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "{\"status\":\"success\",\"dry_run\":true,\"post_url\":\"https://example.invalid/lab2/simulated-posts/python-debugging\",\"note\":\"DRY_RUN=true, nothing was posted.\"}"
+                      }
+                    ],
+                    "structuredContent": {
+                      "status": "success",
+                      "dry_run": true,
+                      "post_url": "https://example.invalid/lab2/simulated-posts/python-debugging",
+                      "note": "DRY_RUN=true, nothing was posted."
+                    },
+                    "isError": false
+                  },
+                  "id": "demo-call-004"
+                }
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-016",
+          "actions": {
+            "stateDelta": {
+              "pipeline_stage": "simulated"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S001-E020",
+          "sequence": 20,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "The dry run was successful! \n\nSince the environment has `DRY_RUN=true` enabled, no actual post was published, but the simulation successfully completed. Here are the details of the simulated post:\n\n* **Status:** Success (Simulated)\n* **Simulated Post URL:** https://example.invalid/lab2/simulated-posts/python-debugging\n* **Image Used:** `/demo/images/python-debugging.png`\n* **Note:** `DRY_RUN=true, nothing was posted.`\n\nEverything worked perfectly! Let me know if you need any other social media posts prepared."
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-016",
+          "actions": {},
+          "event_metadata": {}
+        }
+      ]
+    },
+    {
+      "id": "S002",
+      "scenario": "Traditional Chinese type-hints post for a fictional learning community: approval and simulated publication",
+      "user_id": "demo-user",
+      "state": {
+        "_ag_ui_thread_id": "demo-uuid-005",
+        "_ag_ui_app_name": "social_poster",
+        "_ag_ui_user_id": "demo-user",
+        "pipeline_stage": "simulated",
+        "research_notes": "Here is a set of key concepts and simple code examples for a beginner-friendly introduction to Python type hints.\n\n---\n\n### **What are Type Hints?**\nPython is dynamically typed, meaning you don’t *have* to declare data types when writing code. **Type hints** (introduced in Python 3.5) are a way to optionally label variables, function parameters, and return values with their expected data types. \n\n> **Important Note:** Python does *not* enforce type hints at runtime. If a hint says `int` and you pass a `str`, Python won't crash automatically. Instead, type hints act as **live documentation**, supercharge your code editor's autocomplete, and allow static analysis tools (like `mypy`) to catch bugs before your code even runs.\n\n---\n\n### **1. Basic Syntax: Variables and Functions**\nTo add a type hint, use a colon (`:`) followed by the type name. For functions, use an arrow (`->`) before the colon to specify what the function returns.\n\n```python\n# Variable type hints\nage: int = 25\nname: str = \"Alice\"\nis_active: bool = True\n\n# Function parameter and return type hints\ndef greet(user: str) -> str:\n    return f\"Hello, {user}!\"\n```\n* **Why it helps:** Just by looking at `greet`, anyone reading your code knows it expects a string input and gives a string output without needing to trace through the entire function body.\n\n---\n\n### **2. Collections (Lists, Dictionaries, Tuples)**\nIn modern Python (3.9+), you can use built-in collection types directly with brackets to specify what goes *inside* them.\n\n```python\n# A list containing only strings\ntags: list[str] = [\"python\", \"coding\", \"beginners\"]\n\n# A dictionary with string keys and integer values\nscores: dict[str, int] = {\"Alice\": 95, \"Bob\": 82}\n\n# A tuple with a strict structure (string first, then integer)\nuser_record: tuple[str, int] = (\"Charlie\", 42)\n```\n\n---\n\n### **3. Handling Multiple Types (`|` Operator)**\nSometimes a variable or parameter can accept more than one type. You can use the pipe (`|`) operator (introduced in Python 3.10) to specify alternatives.\n\n```python\ndef process_id(user_id: int | str) -> None:\n    print(f\"Processing ID: {user_id}\")\n\n# Both of these match the type hint expectation\nprocess_id(1048)\nprocess_id(\"user_abc\")\n```\n\n---\n\n### **4. Handling Optional Values (`None`)**\nA common pattern in Python is a function that returns a value if successful, or `None` if it fails. You can hint this using `| None`.\n\n```python\ndef find_username(user_id: int) -> str | None:\n    if user_id == 1:\n        return \"admin\"\n    return None  # Function might return None instead of a string\n```\n\n---\n\n### **Summary Checklist for Beginners**\n* **Syntax:** `variable: type`\n* **Functions:** `def func(param: type) -> return_type:`\n* **Enforcement:** None at runtime—they are for **you**, your **editor**, and **linters**. \n* **Best Place to Start:** Always start by typing your **function signatures** (parameters and return types), as this provides the highest clarity for the least effort.",
+        "_adk_activated_skill_draft_agent": [
+          "post-formatter",
+          "platform-style",
+          "brand-voice",
+          "poster-style"
+        ],
+        "current_image_path": "/demo/images/type-hints.png",
+        "current_image_display_url": "https://example.invalid/lab2/images/type-hints.png",
+        "current_image_url": null,
+        "current_draft": "寫 Python 程式碼時，你是否曾因為傳錯變數類型而卡關很久？\n在 Python 中，`type hints` 就像是程式碼的活導航，能讓你的 `IDE` 變得更聰明，在程式執行前就幫你抓出潛在的錯誤。\n\n它的語法非常簡單，只要在變數或函式參數後加上類型（例如 `name: str`）即可。\n這不僅不會影響運行速度，還能讓共同協作的夥伴一眼看懂你的設計意圖。\n\n從簡單的單一類型，到使用 `|` 符號標示多種可能，`type hints` 能幫你寫出更穩健的程式。\n你在寫 Python 時也會養成加上 `type hints` 的習慣嗎？\n\n#Python #TypeHints #CodingBeginner\n\nImage Path: /demo/images/type-hints.png\nImage URL: https://example.invalid/lab2/images/type-hints.png",
+        "pending_tool_calls": []
+      },
+      "events": [
+        {
+          "id": "S002-E001",
+          "sequence": 1,
+          "author": "user",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "請替一個虛構的 Python 學習社群，製作一則介紹 Python type hints 的 LinkedIn 貼文。\n\n使用繁體中文，保留必要的英文技術名詞，約 150～200 字，語氣清楚、適合初學者。附上一張簡潔、留白充足、不含文字的示意圖片。\n\n請依正常流程查詢記憶、研究、撰寫並生成圖片，在發文前提出核准，等待我確認。"
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-028",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E002",
+          "sequence": 2,
+          "author": "social_poster",
+          "content": {},
+          "invocation_id": "e-demo-uuid-028",
+          "actions": {
+            "stateDelta": {
+              "pipeline_stage": "idea"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E003",
+          "sequence": 3,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "functionCall": {
+                  "name": "load_memory",
+                  "args": {
+                    "query": "Python type hints LinkedIn Traditional Chinese"
+                  },
+                  "id": "demo-call-001"
+                }
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-028",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E004",
+          "sequence": 4,
+          "author": "social_poster",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "functionResponse": {
+                  "name": "load_memory",
+                  "response": {
+                    "result": {
+                      "memories": []
+                    }
+                  },
+                  "id": "demo-call-001"
+                }
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-028",
+          "actions": {
+            "stateDelta": {
+              "pipeline_stage": "consulting_memory"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E005",
+          "sequence": 5,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "functionCall": {
+                  "name": "research_agent",
+                  "args": {
+                    "request": "Python type hints key concepts for beginners and simple code examples, suitable for a short intro post"
+                  },
+                  "id": "demo-call-002"
+                }
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-028",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E006",
+          "sequence": 6,
+          "author": "social_poster",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "functionResponse": {
+                  "name": "research_agent",
+                  "response": {
+                    "result": "Here is a set of key concepts and simple code examples for a beginner-friendly introduction to Python type hints.\n\n---\n\n### **What are Type Hints?**\nPython is dynamically typed, meaning you don’t *have* to declare data types when writing code. **Type hints** (introduced in Python 3.5) are a way to optionally label variables, function parameters, and return values with their expected data types. \n\n> **Important Note:** Python does *not* enforce type hints at runtime. If a hint says `int` and you pass a `str`, Python won't crash automatically. Instead, type hints act as **live documentation**, supercharge your code editor's autocomplete, and allow static analysis tools (like `mypy`) to catch bugs before your code even runs.\n\n---\n\n### **1. Basic Syntax: Variables and Functions**\nTo add a type hint, use a colon (`:`) followed by the type name. For functions, use an arrow (`->`) before the colon to specify what the function returns.\n\n```python\n# Variable type hints\nage: int = 25\nname: str = \"Alice\"\nis_active: bool = True\n\n# Function parameter and return type hints\ndef greet(user: str) -> str:\n    return f\"Hello, {user}!\"\n```\n* **Why it helps:** Just by looking at `greet`, anyone reading your code knows it expects a string input and gives a string output without needing to trace through the entire function body.\n\n---\n\n### **2. Collections (Lists, Dictionaries, Tuples)**\nIn modern Python (3.9+), you can use built-in collection types directly with brackets to specify what goes *inside* them.\n\n```python\n# A list containing only strings\ntags: list[str] = [\"python\", \"coding\", \"beginners\"]\n\n# A dictionary with string keys and integer values\nscores: dict[str, int] = {\"Alice\": 95, \"Bob\": 82}\n\n# A tuple with a strict structure (string first, then integer)\nuser_record: tuple[str, int] = (\"Charlie\", 42)\n```\n\n---\n\n### **3. Handling Multiple Types (`|` Operator)**\nSometimes a variable or parameter can accept more than one type. You can use the pipe (`|`) operator (introduced in Python 3.10) to specify alternatives.\n\n```python\ndef process_id(user_id: int | str) -> None:\n    print(f\"Processing ID: {user_id}\")\n\n# Both of these match the type hint expectation\nprocess_id(1048)\nprocess_id(\"user_abc\")\n```\n\n---\n\n### **4. Handling Optional Values (`None`)**\nA common pattern in Python is a function that returns a value if successful, or `None` if it fails. You can hint this using `| None`.\n\n```python\ndef find_username(user_id: int) -> str | None:\n    if user_id == 1:\n        return \"admin\"\n    return None  # Function might return None instead of a string\n```\n\n---\n\n### **Summary Checklist for Beginners**\n* **Syntax:** `variable: type`\n* **Functions:** `def func(param: type) -> return_type:`\n* **Enforcement:** None at runtime—they are for **you**, your **editor**, and **linters**. \n* **Best Place to Start:** Always start by typing your **function signatures** (parameters and return types), as this provides the highest clarity for the least effort."
+                  },
+                  "id": "demo-call-002"
+                }
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-028",
+          "actions": {
+            "stateDelta": {
+              "research_notes": "Here is a set of key concepts and simple code examples for a beginner-friendly introduction to Python type hints.\n\n---\n\n### **What are Type Hints?**\nPython is dynamically typed, meaning you don’t *have* to declare data types when writing code. **Type hints** (introduced in Python 3.5) are a way to optionally label variables, function parameters, and return values with their expected data types. \n\n> **Important Note:** Python does *not* enforce type hints at runtime. If a hint says `int` and you pass a `str`, Python won't crash automatically. Instead, type hints act as **live documentation**, supercharge your code editor's autocomplete, and allow static analysis tools (like `mypy`) to catch bugs before your code even runs.\n\n---\n\n### **1. Basic Syntax: Variables and Functions**\nTo add a type hint, use a colon (`:`) followed by the type name. For functions, use an arrow (`->`) before the colon to specify what the function returns.\n\n```python\n# Variable type hints\nage: int = 25\nname: str = \"Alice\"\nis_active: bool = True\n\n# Function parameter and return type hints\ndef greet(user: str) -> str:\n    return f\"Hello, {user}!\"\n```\n* **Why it helps:** Just by looking at `greet`, anyone reading your code knows it expects a string input and gives a string output without needing to trace through the entire function body.\n\n---\n\n### **2. Collections (Lists, Dictionaries, Tuples)**\nIn modern Python (3.9+), you can use built-in collection types directly with brackets to specify what goes *inside* them.\n\n```python\n# A list containing only strings\ntags: list[str] = [\"python\", \"coding\", \"beginners\"]\n\n# A dictionary with string keys and integer values\nscores: dict[str, int] = {\"Alice\": 95, \"Bob\": 82}\n\n# A tuple with a strict structure (string first, then integer)\nuser_record: tuple[str, int] = (\"Charlie\", 42)\n```\n\n---\n\n### **3. Handling Multiple Types (`|` Operator)**\nSometimes a variable or parameter can accept more than one type. You can use the pipe (`|`) operator (introduced in Python 3.10) to specify alternatives.\n\n```python\ndef process_id(user_id: int | str) -> None:\n    print(f\"Processing ID: {user_id}\")\n\n# Both of these match the type hint expectation\nprocess_id(1048)\nprocess_id(\"user_abc\")\n```\n\n---\n\n### **4. Handling Optional Values (`None`)**\nA common pattern in Python is a function that returns a value if successful, or `None` if it fails. You can hint this using `| None`.\n\n```python\ndef find_username(user_id: int) -> str | None:\n    if user_id == 1:\n        return \"admin\"\n    return None  # Function might return None instead of a string\n```\n\n---\n\n### **Summary Checklist for Beginners**\n* **Syntax:** `variable: type`\n* **Functions:** `def func(param: type) -> return_type:`\n* **Enforcement:** None at runtime—they are for **you**, your **editor**, and **linters**. \n* **Best Place to Start:** Always start by typing your **function signatures** (parameters and return types), as this provides the highest clarity for the least effort.",
+              "pipeline_stage": "researching"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E007",
+          "sequence": 7,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "functionCall": {
+                  "name": "draft_agent",
+                  "args": {
+                    "request": "Please draft a LinkedIn post about Python type hints in Traditional Chinese for a fictional Python learning community. Keep key English technical terms like 'type hints', 'IDE', 'Python', etc. The length should be around 150-200 words, and the tone should be clear and suitable for beginners.\n\nAlso, generate an image that is concise, has ample whitespace, and contains NO text. Use a simple clean representation related to coding/Python/types (e.g., abstract geometric shapes or a minimalist programming aesthetic with soft colors and lots of whitespace. Strictly no text in the image)."
+                  },
+                  "id": "demo-call-006"
+                }
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-028",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E008",
+          "sequence": 8,
+          "author": "social_poster",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "functionResponse": {
+                  "name": "draft_agent",
+                  "response": {
+                    "result": "寫 Python 程式碼時，你是否曾因為傳錯變數類型而卡關很久？\n在 Python 中，`type hints` 就像是程式碼的活導航，能讓你的 `IDE` 變得更聰明，在程式執行前就幫你抓出潛在的錯誤。\n\n它的語法非常簡單，只要在變數或函式參數後加上類型（例如 `name: str`）即可。\n這不僅不會影響運行速度，還能讓共同協作的夥伴一眼看懂你的設計意圖。\n\n從簡單的單一類型，到使用 `|` 符號標示多種可能，`type hints` 能幫你寫出更穩健的程式。\n你在寫 Python 時也會養成加上 `type hints` 的習慣嗎？\n\n#Python #TypeHints #CodingBeginner\n\nImage Path: /demo/images/type-hints.png\nImage URL: https://example.invalid/lab2/images/type-hints.png"
+                  },
+                  "id": "demo-call-006"
+                }
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-028",
+          "actions": {
+            "stateDelta": {
+              "_adk_activated_skill_draft_agent": [
+                "post-formatter",
+                "platform-style",
+                "brand-voice",
+                "poster-style"
+              ],
+              "current_image_path": "/demo/images/type-hints.png",
+              "current_image_display_url": "https://example.invalid/lab2/images/type-hints.png",
+              "current_image_url": null,
+              "current_draft": "寫 Python 程式碼時，你是否曾因為傳錯變數類型而卡關很久？\n在 Python 中，`type hints` 就像是程式碼的活導航，能讓你的 `IDE` 變得更聰明，在程式執行前就幫你抓出潛在的錯誤。\n\n它的語法非常簡單，只要在變數或函式參數後加上類型（例如 `name: str`）即可。\n這不僅不會影響運行速度，還能讓共同協作的夥伴一眼看懂你的設計意圖。\n\n從簡單的單一類型，到使用 `|` 符號標示多種可能，`type hints` 能幫你寫出更穩健的程式。\n你在寫 Python 時也會養成加上 `type hints` 的習慣嗎？\n\n#Python #TypeHints #CodingBeginner\n\nImage Path: /demo/images/type-hints.png\nImage URL: https://example.invalid/lab2/images/type-hints.png",
+              "pipeline_stage": "drafting"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E009",
+          "sequence": 9,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "這是我為您的 Python 學習社群撰寫的 LinkedIn 貼文草稿：\n\n---\n\n寫 Python 程式碼時，你是否曾因為傳錯變數類型而卡關很久？\n在 Python 中，`type hints` 就像是程式碼的活導航，能讓你的 `IDE` 變得更聰明，在程式執行前就幫你抓出潛在的錯誤。\n\n它的語法非常簡單，只要在變數或函式參數後加上類型（例如 `name: str`）即可。\n這不僅不會影響運行速度，還能讓共同協作的夥伴一眼看懂你的設計意圖。\n\n從簡單的單一類型，到使用 `|` 符號標示多種可能，`type hints` 能幫你寫出更穩健的程式。\n你在寫 Python 時也會養成加上 `type hints` 的習慣嗎？\n\n#Python #TypeHints #CodingBeginner\n\n![post image](https://example.invalid/lab2/images/type-hints.png)\n\n---\n\n### **圖片本地路徑：**\n`/demo/images/type-hints.png`\n\n請確認此草稿與圖片是否符合您的預期。若確認無誤，**請回覆「確認」或「核准」**，我將會為您進行發佈！"
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-028",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E010",
+          "sequence": 10,
+          "author": "social_poster",
+          "content": {},
+          "invocation_id": "e-demo-uuid-028",
+          "actions": {
+            "stateDelta": {
+              "pipeline_stage": "awaiting_approval"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E011",
+          "sequence": 11,
+          "author": "user",
+          "content": {},
+          "invocation_id": "demo-state-update-002",
+          "actions": {
+            "stateDelta": {
+              "pipeline_stage": "awaiting_approval",
+              "research_notes": "Here is a set of key concepts and simple code examples for a beginner-friendly introduction to Python type hints.\n\n---\n\n### **What are Type Hints?**\nPython is dynamically typed, meaning you don’t *have* to declare data types when writing code. **Type hints** (introduced in Python 3.5) are a way to optionally label variables, function parameters, and return values with their expected data types. \n\n> **Important Note:** Python does *not* enforce type hints at runtime. If a hint says `int` and you pass a `str`, Python won't crash automatically. Instead, type hints act as **live documentation**, supercharge your code editor's autocomplete, and allow static analysis tools (like `mypy`) to catch bugs before your code even runs.\n\n---\n\n### **1. Basic Syntax: Variables and Functions**\nTo add a type hint, use a colon (`:`) followed by the type name. For functions, use an arrow (`->`) before the colon to specify what the function returns.\n\n```python\n# Variable type hints\nage: int = 25\nname: str = \"Alice\"\nis_active: bool = True\n\n# Function parameter and return type hints\ndef greet(user: str) -> str:\n    return f\"Hello, {user}!\"\n```\n* **Why it helps:** Just by looking at `greet`, anyone reading your code knows it expects a string input and gives a string output without needing to trace through the entire function body.\n\n---\n\n### **2. Collections (Lists, Dictionaries, Tuples)**\nIn modern Python (3.9+), you can use built-in collection types directly with brackets to specify what goes *inside* them.\n\n```python\n# A list containing only strings\ntags: list[str] = [\"python\", \"coding\", \"beginners\"]\n\n# A dictionary with string keys and integer values\nscores: dict[str, int] = {\"Alice\": 95, \"Bob\": 82}\n\n# A tuple with a strict structure (string first, then integer)\nuser_record: tuple[str, int] = (\"Charlie\", 42)\n```\n\n---\n\n### **3. Handling Multiple Types (`|` Operator)**\nSometimes a variable or parameter can accept more than one type. You can use the pipe (`|`) operator (introduced in Python 3.10) to specify alternatives.\n\n```python\ndef process_id(user_id: int | str) -> None:\n    print(f\"Processing ID: {user_id}\")\n\n# Both of these match the type hint expectation\nprocess_id(1048)\nprocess_id(\"user_abc\")\n```\n\n---\n\n### **4. Handling Optional Values (`None`)**\nA common pattern in Python is a function that returns a value if successful, or `None` if it fails. You can hint this using `| None`.\n\n```python\ndef find_username(user_id: int) -> str | None:\n    if user_id == 1:\n        return \"admin\"\n    return None  # Function might return None instead of a string\n```\n\n---\n\n### **Summary Checklist for Beginners**\n* **Syntax:** `variable: type`\n* **Functions:** `def func(param: type) -> return_type:`\n* **Enforcement:** None at runtime—they are for **you**, your **editor**, and **linters**. \n* **Best Place to Start:** Always start by typing your **function signatures** (parameters and return types), as this provides the highest clarity for the least effort.",
+              "_adk_activated_skill_draft_agent": [
+                "post-formatter",
+                "platform-style",
+                "brand-voice",
+                "poster-style"
+              ],
+              "current_image_path": "/demo/images/type-hints.png",
+              "current_image_display_url": "https://example.invalid/lab2/images/type-hints.png",
+              "current_image_url": null,
+              "current_draft": "寫 Python 程式碼時，你是否曾因為傳錯變數類型而卡關很久？\n在 Python 中，`type hints` 就像是程式碼的活導航，能讓你的 `IDE` 變得更聰明，在程式執行前就幫你抓出潛在的錯誤。\n\n它的語法非常簡單，只要在變數或函式參數後加上類型（例如 `name: str`）即可。\n這不僅不會影響運行速度，還能讓共同協作的夥伴一眼看懂你的設計意圖。\n\n從簡單的單一類型，到使用 `|` 符號標示多種可能，`type hints` 能幫你寫出更穩健的程式。\n你在寫 Python 時也會養成加上 `type hints` 的習慣嗎？\n\n#Python #TypeHints #CodingBeginner\n\nImage Path: /demo/images/type-hints.png\nImage URL: https://example.invalid/lab2/images/type-hints.png"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E012",
+          "sequence": 12,
+          "author": "user",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "草稿與圖片確認無誤。請沿用目前的草稿與既有圖片，繼續 LinkedIn 發文流程，提出發文工具的核准請求，等待我在核准介面操作。無須重新研究、改寫或生成圖片。"
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-010",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E013",
+          "sequence": 13,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "functionCall": {
+                  "name": "linkedin_create_post",
+                  "args": {
+                    "image_path": "/demo/images/type-hints.png",
+                    "text": "寫 Python 程式碼時，你是否曾因為傳錯變數類型而卡關很久？\n在 Python 中，`type hints` 就像是程式碼的活導航，能讓你的 `IDE` 變得更聰明，在程式執行前就幫你抓出潛在的錯誤。\n\n它的語法非常簡單，只要在變數或函式參數後加上類型（例如 `name: str`）即可。\n這不僅不會影響運行速度，還能讓共同協作的夥伴一眼看懂你的設計意圖。\n\n從簡單的單一類型，到使用 `|` 符號標示多種可能，`type hints` 能幫你寫出更穩健的程式。\n你在寫 Python 時也會養成加上 `type hints` 的習慣嗎？\n\n#Python #TypeHints #CodingBeginner"
+                  },
+                  "id": "demo-call-005"
+                }
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-010",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E014",
+          "sequence": 14,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "functionCall": {
+                  "name": "adk_request_confirmation",
+                  "args": {
+                    "originalFunctionCall": {
+                      "id": "demo-call-005",
+                      "args": {
+                        "image_path": "/demo/images/type-hints.png",
+                        "text": "寫 Python 程式碼時，你是否曾因為傳錯變數類型而卡關很久？\n在 Python 中，`type hints` 就像是程式碼的活導航，能讓你的 `IDE` 變得更聰明，在程式執行前就幫你抓出潛在的錯誤。\n\n它的語法非常簡單，只要在變數或函式參數後加上類型（例如 `name: str`）即可。\n這不僅不會影響運行速度，還能讓共同協作的夥伴一眼看懂你的設計意圖。\n\n從簡單的單一類型，到使用 `|` 符號標示多種可能，`type hints` 能幫你寫出更穩健的程式。\n你在寫 Python 時也會養成加上 `type hints` 的習慣嗎？\n\n#Python #TypeHints #CodingBeginner"
+                      },
+                      "name": "linkedin_create_post"
+                    },
+                    "toolConfirmation": {
+                      "hint": "Please approve or reject the tool call linkedin_create_post() by responding with a FunctionResponse with an expected ToolConfirmation payload.",
+                      "confirmed": false
+                    }
+                  },
+                  "id": "adk-demo-uuid-050"
+                }
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-010",
+          "actions": {},
+          "event_metadata": {
+            "longRunningToolIds": [
+              "adk-demo-uuid-050"
+            ]
+          }
+        },
+        {
+          "id": "S002-E015",
+          "sequence": 15,
+          "author": "user",
+          "content": {},
+          "invocation_id": "demo-state-update-003",
+          "actions": {
+            "stateDelta": {
+              "pending_tool_calls": [
+                "adk-demo-uuid-050"
+              ]
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E016",
+          "sequence": 16,
+          "author": "user",
+          "content": {},
+          "invocation_id": "demo-state-update-004",
+          "actions": {
+            "stateDelta": {
+              "pending_tool_calls": []
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E017",
+          "sequence": 17,
+          "author": "user",
+          "content": {},
+          "invocation_id": "demo-state-update-005",
+          "actions": {
+            "stateDelta": {
+              "pipeline_stage": "awaiting_approval",
+              "research_notes": "Here is a set of key concepts and simple code examples for a beginner-friendly introduction to Python type hints.\n\n---\n\n### **What are Type Hints?**\nPython is dynamically typed, meaning you don’t *have* to declare data types when writing code. **Type hints** (introduced in Python 3.5) are a way to optionally label variables, function parameters, and return values with their expected data types. \n\n> **Important Note:** Python does *not* enforce type hints at runtime. If a hint says `int` and you pass a `str`, Python won't crash automatically. Instead, type hints act as **live documentation**, supercharge your code editor's autocomplete, and allow static analysis tools (like `mypy`) to catch bugs before your code even runs.\n\n---\n\n### **1. Basic Syntax: Variables and Functions**\nTo add a type hint, use a colon (`:`) followed by the type name. For functions, use an arrow (`->`) before the colon to specify what the function returns.\n\n```python\n# Variable type hints\nage: int = 25\nname: str = \"Alice\"\nis_active: bool = True\n\n# Function parameter and return type hints\ndef greet(user: str) -> str:\n    return f\"Hello, {user}!\"\n```\n* **Why it helps:** Just by looking at `greet`, anyone reading your code knows it expects a string input and gives a string output without needing to trace through the entire function body.\n\n---\n\n### **2. Collections (Lists, Dictionaries, Tuples)**\nIn modern Python (3.9+), you can use built-in collection types directly with brackets to specify what goes *inside* them.\n\n```python\n# A list containing only strings\ntags: list[str] = [\"python\", \"coding\", \"beginners\"]\n\n# A dictionary with string keys and integer values\nscores: dict[str, int] = {\"Alice\": 95, \"Bob\": 82}\n\n# A tuple with a strict structure (string first, then integer)\nuser_record: tuple[str, int] = (\"Charlie\", 42)\n```\n\n---\n\n### **3. Handling Multiple Types (`|` Operator)**\nSometimes a variable or parameter can accept more than one type. You can use the pipe (`|`) operator (introduced in Python 3.10) to specify alternatives.\n\n```python\ndef process_id(user_id: int | str) -> None:\n    print(f\"Processing ID: {user_id}\")\n\n# Both of these match the type hint expectation\nprocess_id(1048)\nprocess_id(\"user_abc\")\n```\n\n---\n\n### **4. Handling Optional Values (`None`)**\nA common pattern in Python is a function that returns a value if successful, or `None` if it fails. You can hint this using `| None`.\n\n```python\ndef find_username(user_id: int) -> str | None:\n    if user_id == 1:\n        return \"admin\"\n    return None  # Function might return None instead of a string\n```\n\n---\n\n### **Summary Checklist for Beginners**\n* **Syntax:** `variable: type`\n* **Functions:** `def func(param: type) -> return_type:`\n* **Enforcement:** None at runtime—they are for **you**, your **editor**, and **linters**. \n* **Best Place to Start:** Always start by typing your **function signatures** (parameters and return types), as this provides the highest clarity for the least effort.",
+              "_adk_activated_skill_draft_agent": [
+                "post-formatter",
+                "platform-style",
+                "brand-voice",
+                "poster-style"
+              ],
+              "current_image_path": "/demo/images/type-hints.png",
+              "current_image_display_url": "https://example.invalid/lab2/images/type-hints.png",
+              "current_image_url": null,
+              "current_draft": "寫 Python 程式碼時，你是否曾因為傳錯變數類型而卡關很久？\n在 Python 中，`type hints` 就像是程式碼的活導航，能讓你的 `IDE` 變得更聰明，在程式執行前就幫你抓出潛在的錯誤。\n\n它的語法非常簡單，只要在變數或函式參數後加上類型（例如 `name: str`）即可。\n這不僅不會影響運行速度，還能讓共同協作的夥伴一眼看懂你的設計意圖。\n\n從簡單的單一類型，到使用 `|` 符號標示多種可能，`type hints` 能幫你寫出更穩健的程式。\n你在寫 Python 時也會養成加上 `type hints` 的習慣嗎？\n\n#Python #TypeHints #CodingBeginner\n\nImage Path: /demo/images/type-hints.png\nImage URL: https://example.invalid/lab2/images/type-hints.png"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E018",
+          "sequence": 18,
+          "author": "user",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "functionResponse": {
+                  "name": "adk_request_confirmation",
+                  "response": {
+                    "confirmed": true
+                  },
+                  "id": "adk-demo-uuid-050"
+                }
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-010",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E019",
+          "sequence": 19,
+          "author": "social_poster",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "functionResponse": {
+                  "name": "linkedin_create_post",
+                  "response": {
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "{\"status\":\"success\",\"dry_run\":true,\"post_url\":\"https://example.invalid/lab2/simulated-posts/type-hints\",\"note\":\"DRY_RUN=true, nothing was posted.\"}"
+                      }
+                    ],
+                    "structuredContent": {
+                      "status": "success",
+                      "dry_run": true,
+                      "post_url": "https://example.invalid/lab2/simulated-posts/type-hints",
+                      "note": "DRY_RUN=true, nothing was posted."
+                    },
+                    "isError": false
+                  },
+                  "id": "demo-call-005"
+                }
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-010",
+          "actions": {
+            "stateDelta": {
+              "pipeline_stage": "simulated"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S002-E020",
+          "sequence": 20,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "我已成功為您執行發佈流程！\n\n由於目前系統處於 **測試預覽模式 (Dry Run)**，以下是模擬發佈的結果：\n\n* **發佈狀態**：成功 (Success)\n* **模擬連結**：[LinkedIn 貼文網址](https://example.invalid/lab2/simulated-posts/type-hints)\n* **附加圖片**：已成功夾帶本地圖片 `/demo/images/type-hints.png`\n\n若在正式生產環境中，該貼文現已正式發佈至您的 LinkedIn 個人頁面！"
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-010",
+          "actions": {},
+          "event_metadata": {}
+        }
+      ]
+    },
+    {
+      "id": "S003",
+      "scenario": "Session continuation diagnostic using a non-secret test marker",
+      "user_id": "demo-user",
+      "state": {
+        "step4_marker": "LAB2-SESSION-CHECK",
+        "_ag_ui_thread_id": "demo-persistence-thread",
+        "_ag_ui_app_name": "social_poster",
+        "_ag_ui_user_id": "demo-user",
+        "pipeline_stage": "idea"
+      },
+      "events": [
+        {
+          "id": "S003-E001",
+          "sequence": 1,
+          "author": "user",
+          "content": {},
+          "invocation_id": "demo-state-update-001",
+          "actions": {
+            "stateDelta": {
+              "step4_marker": "LAB2-SESSION-CHECK"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S003-E002",
+          "sequence": 2,
+          "author": "user",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "This is a session persistence diagnostic. Remember verification code LAB2-SESSION-CHECK. Do not call any tools or publish anything. Reply only: SESSION_READY"
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-018",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S003-E003",
+          "sequence": 3,
+          "author": "social_poster",
+          "content": {},
+          "invocation_id": "e-demo-uuid-018",
+          "actions": {
+            "stateDelta": {
+              "pipeline_stage": "idea"
+            }
+          },
+          "event_metadata": {}
+        },
+        {
+          "id": "S003-E004",
+          "sequence": 4,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "SESSION_READY"
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-018",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S003-E005",
+          "sequence": 5,
+          "author": "user",
+          "content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "What verification code did I ask you to remember earlier in this conversation? Reply with the code only. Do not call any tools or publish anything."
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-021",
+          "actions": {},
+          "event_metadata": {}
+        },
+        {
+          "id": "S003-E006",
+          "sequence": 6,
+          "author": "social_poster",
+          "content": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "LAB2-SESSION-CHECK"
+              },
+              {
+                "text": ""
+              }
+            ]
+          },
+          "invocation_id": "e-demo-uuid-021",
+          "actions": {},
+          "event_metadata": {}
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "format": "lab2-public-demo-manifest-v1",
+  "counts": {
+    "memories": 5,
+    "sessions": 3,
+    "session_events": 46
+  },
+  "validation": {
+    "represented_records_including_metadata": 55,
+    "signature_fields_removed": 28,
+    "ordered_events_preserved": true,
+    "confirmation_links_preserved": true,
+    "dry_run_results": 2,
+    "original_identifiers_scan": "passed"
+  },
+  "files": {
+    "README.md": {
+      "bytes": 3151,
+      "sha256": "2ab3fe90e371fccfbfd8f6459e79e52d2a873a563570a5d9f7146b8c4fc87d8c"
+    },
+    "demo-data.json": {
+      "bytes": 87035,
+      "sha256": "4a48aacf5babf87bc8ea948cb220029229c9ba983a98b6f43815e46ef2a50e47"
+    }
+  }
+}
