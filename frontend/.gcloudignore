@@ -1,0 +1,40 @@
+# Lab 2 Step 7: applies to --source frontend, not the repository root.
+.gcloudignore
+.git
+.gitignore
+#!include:.gitignore
+
+# Local dependencies and generated output are rebuilt in Cloud Build.
+node_modules/
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+*.log
+
+# Local environment and credentials must never be uploaded.
+.env*
+**/.env*
+.npmrc
+**/.npmrc
+.yarnrc*
+**/.yarnrc*
+*.pem
+*.key
+*.p12
+*.pfx
+*credentials*.json
+service-account*.json
+service_account*.json
+.config/
+.ssh/
+.aws/
+
+# Local tooling and deployment bookkeeping.
+.agents/
+.claude/
+.codex/
+.vercel/
+deployment_metadata.json*

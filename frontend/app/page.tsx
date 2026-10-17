@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type ComponentProps, useState } from "react";
 import { CopilotKit } from "@copilotkit/react-core";
 import { CopilotSidebar } from "@copilotkit/react-ui";
 import "@copilotkit/react-ui/styles.css";
@@ -12,6 +12,34 @@ import { ConfirmAction } from "./components/ConfirmAction";
 import { GoogleDots, Logo } from "./components/Logo";
 import { PostGallery } from "./components/PostGallery";
 import { StagePanel } from "./components/StagePanel";
+
+// Step 6: render legacy backend image URLs through the same-origin proxy.
+function proxyOutputUrl<T>(value: T): T | string {
+  if (typeof value !== "string") return value;
+  try {
+    const url = new URL(value);
+    if (
+      ["http://localhost:8000", "http://127.0.0.1:8000"].includes(url.origin) &&
+      !url.username && !url.password &&
+      url.pathname.startsWith("/outputs/")
+    ) {
+      return url.pathname + url.search + url.hash;
+    }
+  } catch {
+    // Relative URLs and non-URL text keep their existing behavior.
+  }
+  return value;
+}
+
+const OUTPUT_MARKDOWN_RENDERERS = {
+  a: ({ node: _node, href, ...props }: ComponentProps<"a"> & { node?: unknown }) => (
+    <a {...props} href={proxyOutputUrl(href)} />
+  ),
+  img: ({ node: _node, src, ...props }: ComponentProps<"img"> & { node?: unknown }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img {...props} src={proxyOutputUrl(src)} />
+  ),
+} satisfies NonNullable<ComponentProps<typeof CopilotSidebar>["markdownTagRenderers"]>;
 
 const SUGGESTIONS = [
   {
@@ -110,6 +138,7 @@ function Dashboard() {
         clickOutsideToClose={false}
         onSetOpen={setChatOpen}
         suggestions={SUGGESTIONS}
+        markdownTagRenderers={OUTPUT_MARKDOWN_RENDERERS}
         attachments={{ enabled: true, accept: "image/*" }}
         labels={{
           title: "Social Spark",

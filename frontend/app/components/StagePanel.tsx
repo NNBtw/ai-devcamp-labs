@@ -21,7 +21,10 @@ const STAGES: { key: string; icon: string; label: string }[] = [
 export function StagePanel() {
   const { state } = useCoAgent<AgentState>({ name: "social_poster" });
   const current = state?.pipeline_stage ?? "idea";
-  const currentIdx = STAGES.findIndex((s) => s.key === current);
+  const isSimulated = current === "simulated";
+  const currentIdx = STAGES.findIndex(
+    (s) => s.key === (isSimulated ? "posted" : current)
+  );
 
   return (
     <section className="card">
@@ -30,10 +33,16 @@ export function StagePanel() {
         {STAGES.map((stage, i) => {
           const status =
             i < currentIdx ? "done" : i === currentIdx ? "current" : "";
+          const simulatedFinal = isSimulated && stage.key === "posted";
+          const icon = simulatedFinal ? "🧪" : stage.icon;
+          const label = simulatedFinal
+            ? "Simulated (not published)"
+            : stage.label;
+
           return (
             <li key={stage.key} className={`step ${status}`}>
-              <div className="dot">{i < currentIdx ? "✓" : stage.icon}</div>
-              {stage.label}
+              <div className="dot">{i < currentIdx ? "✓" : icon}</div>
+              {label}
             </li>
           );
         })}

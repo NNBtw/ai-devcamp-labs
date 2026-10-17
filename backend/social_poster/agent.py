@@ -3,6 +3,7 @@ over `research_agent`, `draft_agent`, an optional `memory_agent`, and posting
 toolsets for LinkedIn and Buffer.
 """
 
+import asyncio
 import datetime
 import json
 import logging
@@ -21,7 +22,7 @@ from google.adk.agents.remote_a2a_agent import RemoteA2aAgent
 from google.adk.models.llm_request import LlmRequest
 from google.adk.models.llm_response import LlmResponse
 from google.adk.skills import load_skill_from_dir
-from google.adk.tools import google_search
+from google.adk.tools import google_search, load_memory
 from google.adk.tools.agent_tool import AgentTool
 from google.adk.tools.base_tool import BaseTool
 from google.adk.tools.mcp_tool import McpToolset
@@ -35,6 +36,7 @@ from google.genai import types as genai_types
 from mcp import StdioServerParameters
 
 from . import db
+from .memory_ingestion import ingest_session_with_retry
 from .tools import (
     OUTPUTS_DIR,
     check_text_length,
@@ -325,6 +327,10 @@ Rules:
 MEMORY_AGENT_CARD_URL = os.environ.get("MEMORY_AGENT_CARD_URL", "")
 
 memory_agent = None
+# Vertex AI Memory Bank is available only in Agent Runtime.
+# Local development keeps the existing memory behavior.
+use_memory_bank = bool(os.environ.get("APP_URL", "").strip())
+
 if MEMORY_AGENT_CARD_URL:
     memory_agent = RemoteA2aAgent(
         name="memory_agent",
@@ -477,6 +483,7 @@ _TOOL_STAGES = {
     research_agent.name: "researching",
     draft_agent.name: "drafting",
     "memory_agent": "consulting_memory",
+    "load_memory": "consulting_memory",
 }
 
 
@@ -512,8 +519,25 @@ def _track_stage(
         # Fires on BLOCKED attempts too (require_confirmation returns an
         # {"error": ...} without "isError") — only a completed MCP call
         # carries isError: False. See LEARNINGS (2026-07-14).
-        tool_context.state["pipeline_stage"] = "posted"
         parsed = _unwrap_mcp_result(tool_response)
+
+        # A LinkedIn dry run is not a published post.
+        if tool.name == "linkedin_create_post":
+            if parsed.get("dry_run") is True:
+                tool_context.state["pipeline_stage"] = "simulated"
+                log.info("LinkedIn DRY_RUN completed; skipping published-post storage")
+                return None
+
+            if parsed.get("status") != "success":
+                log.warning("LinkedIn post did not succeed: %s", parsed.get("status"))
+                return None
+
+            # Only an explicit dry_run=False confirms real publication.
+            if parsed.get("dry_run") is not False:
+                log.warning("LinkedIn publication not confirmed; skipping storage")
+                return None
+
+        tool_context.state["pipeline_stage"] = "posted"
         platform = "Buffer" if args.get("channelId") else "LinkedIn"
         # Buffer's create_post never returns post_url/url (confirmed live —
         # its own tool description says it returns "status ... and
@@ -538,18 +562,86 @@ def _track_stage(
     return None  # never modify the tool result
 
 
-def _stage_after_agent(callback_context: CallbackContext) -> None:
-    # A turn that ends mid-pipeline is waiting on the user (draft approval).
+async def _stage_after_agent(callback_context: CallbackContext) -> None:
+    # A turn that ends mid-pipeline is waiting on user approval.
     if callback_context.state.get("pipeline_stage") in ("researching", "drafting"):
         callback_context.state["pipeline_stage"] = "awaiting_approval"
+        return
+
+    if not use_memory_bank or callback_context.state.get("pipeline_stage") != "posted":
+        return
+
+    state = callback_context.state
+    # Preserve legacy scheduled sessions and prevent another callback attempt.
+    if state.get("memory_ingestion_scheduled") or state.get("memory_ingestion_attempted"):
+        return
+
+    state["memory_ingestion_attempted"] = True
+    state["memory_ingestion_status"] = "submitting"
+    state["memory_ingestion_api_accepted"] = None
+    state["memory_ingestion_searchable"] = None
+    try:
+        receipt = await ingest_session_with_retry(
+            session=callback_context.session,
+            runtime_resource=os.environ.get("APP_URL", ""),
+        )
+    except asyncio.CancelledError:
+        state["memory_ingestion_status"] = "submission_unconfirmed"
+        raise
+    except Exception as error:
+        # Keep posted unchanged; do not publish again or restart submission.
+        state["memory_ingestion_status"] = "submission_unconfirmed"
+        status_code = getattr(error, "code", None)
+        if type(status_code) is not int:
+            status_code = None
+        state["memory_ingestion_error_type"] = type(error).__name__
+        state["memory_ingestion_http_status"] = status_code
+        # API error bodies may contain submitted data; do not log them.
+        log.error(
+            "Memory Bank submission unconfirmed: type=%s http_status=%s",
+            type(error).__name__, status_code,
+        )
+        return
+
+    state["memory_ingestion_status"] = receipt.status
+    state["memory_ingestion_api_accepted"] = receipt.api_accepted
+    state["memory_ingestion_operation_name"] = receipt.operation_name
+    state["memory_ingestion_operation_completed"] = receipt.operation_completed
+    state["memory_ingestion_operation_succeeded"] = receipt.operation_succeeded
+    state["memory_ingestion_operation_error_code"] = receipt.operation_error_code
+    state["memory_ingestion_searchable"] = receipt.memory_searchable
+    if receipt.api_accepted:
+        state["memory_ingestion_scheduled"] = True
+
+    log.info(
+        "Memory Bank ingestion status=%s operation=%s",
+        receipt.status, receipt.operation_name,
+    )
+    if receipt.status == "operation_failed":
+        log.error("Memory Bank operation failed; code=%s", receipt.operation_error_code)
 
 
 # --- Orchestrator -------------------------------------------------------------
-_MEMORY_ROUTING = """
-0. FIRST, before researching or drafting, ask memory_agent what the user has
-   posted about before and how they phrase things; weave that into the draft
-   brief so the new post sounds like them and doesn't repeat old topics.
-""" if memory_agent else ""
+# Determine which memory sources are available.
+_MEMORY_SOURCES = " and ".join(
+    filter(
+        None,
+        [
+            "memory_agent" if memory_agent else "",
+            "load_memory" if use_memory_bank else "",
+        ],
+    )
+)
+
+# Guide the orchestrator to consult available memory before drafting.
+_MEMORY_ROUTING = f"""
+0. FIRST, before researching or drafting, call {_MEMORY_SOURCES} to find out
+   what the user has posted about before, how they phrase things, and any
+   preferences they have stated (preferred platform, tone, topics to avoid).
+   Weave that into the draft brief so the new post sounds like them and
+   doesn't repeat old topics. If nothing comes back, continue normally
+   without inventing preferences.
+""" if _MEMORY_SOURCES else ""
 
 if use_buffer and use_gcs:
     _BUFFER_IMAGE_NOTE = """
@@ -664,13 +756,14 @@ Posting rules (strict):
   own tool (Step 7) posts immediately for real, so its result can be
   reported as posted/published directly.
 """,
-    tools=[
-        *([AgentTool(agent=memory_agent)] if memory_agent else []),
-        AgentTool(agent=research_agent),
-        AgentTool(agent=draft_agent),
-        *([linkedin_toolset, linkedin_post_toolset] if use_linkedin else []),
-        *([buffer_toolset, buffer_post_toolset] if use_buffer else []),
-    ],
+tools=[
+    *([AgentTool(agent=memory_agent)] if memory_agent else []),
+    *([load_memory] if use_memory_bank else []),
+    AgentTool(agent=research_agent),
+    AgentTool(agent=draft_agent),
+    *([linkedin_toolset, linkedin_post_toolset] if use_linkedin else []),
+    *([buffer_toolset, buffer_post_toolset] if use_buffer else []),
+],
     before_agent_callback=_init_stage,
     before_model_callback=_stage_attached_image,
     before_tool_callback=_delay_buffer_post,
