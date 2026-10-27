@@ -36,6 +36,14 @@ from google.genai import types as genai_types
 from mcp import StdioServerParameters
 
 from . import db
+from .guardrails import (
+    content_config,
+    friendly_block,
+    model,
+    redact_before_post,
+    redact_pii_text,
+    redact_post_calls,
+)
 from .memory_ingestion import ingest_session_with_retry
 from .tools import (
     OUTPUTS_DIR,
@@ -104,7 +112,9 @@ ORCHESTRATOR_MODEL = os.environ.get("ORCHESTRATOR_MODEL", "gemini-2.5-flash")
 # output_key writes the summary into session state for draft_agent to read.
 research_agent = Agent(
     name="research_agent",
-    model=RESEARCH_MODEL,
+    model=model(RESEARCH_MODEL),
+    generate_content_config=content_config(screen_input=False),
+    after_model_callback=friendly_block,
     description="Researches facts, dates, and context on the web for a post idea.",
     instruction="""Research the given topic with google_search and return a
 concise, factual summary: key facts, dates, numbers, and anything surprising
@@ -269,7 +279,8 @@ def _catch_image_placeholder(
 
 draft_agent = Agent(
     name="draft_agent",
-    model=DRAFT_MODEL,
+    model=model(DRAFT_MODEL),
+    generate_content_config=content_config(screen_input=False),
     description="Writes and revises the social media post draft, and generates images.",
     instruction=f"""You write social media post drafts.
 
@@ -315,7 +326,7 @@ Rules:
         *([upload_image] if use_gcs else []),
     ],
     output_key="current_draft",
-    after_model_callback=_catch_image_placeholder,
+    after_model_callback=[friendly_block, _catch_image_placeholder],
     after_tool_callback=_track_image_state,
 )
 
@@ -715,7 +726,9 @@ else:
 
 root_agent = Agent(
     name="social_poster",
-    model=ORCHESTRATOR_MODEL,
+    model=model(ORCHESTRATOR_MODEL),
+    generate_content_config=content_config(screen_input=True),
+    after_model_callback=[friendly_block, redact_post_calls],
     description="Orchestrates research, drafting, and publishing of social media posts.",
     instruction=f"""You orchestrate turning an idea into a social media post.
 You do not research or draft yourself — you route work to specialist tools.
@@ -745,6 +758,9 @@ Posting rules (strict):
   them in this conversation. "Yes", "post it", "approved" counts; silence,
   topic changes, or enthusiasm about the idea does not.
 - If the draft changes after approval, show it again and get fresh approval.
+- If a posting tool returns requires_review, show its redacted_text and submit
+  a new posting call for fresh confirmation. Never reuse the previous approval
+  or report the blocked call as posted. Use redact_pii_text to clean source text.
 - After posting, check the tool result's own "status" and "dueAt" fields
   before telling the user what happened — confirmed live: Buffer's
   create_post returns "the created post with ... status, and scheduling
@@ -761,12 +777,13 @@ tools=[
     *([load_memory] if use_memory_bank else []),
     AgentTool(agent=research_agent),
     AgentTool(agent=draft_agent),
+    redact_pii_text,
     *([linkedin_toolset, linkedin_post_toolset] if use_linkedin else []),
     *([buffer_toolset, buffer_post_toolset] if use_buffer else []),
 ],
     before_agent_callback=_init_stage,
     before_model_callback=_stage_attached_image,
-    before_tool_callback=_delay_buffer_post,
+    before_tool_callback=[redact_before_post, _delay_buffer_post],
     after_tool_callback=_track_stage,
     after_agent_callback=_stage_after_agent,
 )

@@ -10,6 +10,7 @@ dependencies = [
     "fastmcp==3.4.4",
     "httpx==0.28.1",
     "google-cloud-storage==3.13.0",
+    "google-cloud-dlp==3.40.0",
     "ag-ui-adk==0.7.0",
     "fastapi==0.139.0",
     "uvicorn==0.51.0",
@@ -23,3 +24,9 @@ dev = [
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+
+[[tool.uv.dependency-metadata]]
+name = "rouge-score"
+version = "0.1.2"
+requires-python = ">=3.7"
+requires-dist = ["absl-py", "nltk", "numpy", "six>=1.14.0"]

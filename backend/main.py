@@ -3,24 +3,65 @@
 Run from the repo root:  uv run uvicorn backend.main:app --port 8000
 """
 
+import logging
 import os
 import pathlib
 import re
 
 from ag_ui_adk import ADKAgent, add_adk_fastapi_endpoint
+from ag_ui.core import RunAgentInput
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from google.adk.agents.run_config import RunConfig, StreamingMode
 from google.adk.memory import VertexAiMemoryBankService
 from google.adk.sessions import VertexAiSessionService
+
+
+_ADK_EVENT_METADATA = re.compile(
+    r"\[ADK_EVENT\] author=([A-Za-z_][A-Za-z0-9_]{0,63}), "
+    r"partial=(True|False|None), turn_complete=(True|False|None)"
+    r"(?:, content=[\s\S]*)?"
+)
+
+
+class _AdkEventContentFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        if record.name != "ag_ui_adk.adk_agent":
+            return True
+        try:
+            message = record.getMessage()
+        except Exception:
+            message = "[ADK_EVENT]"
+        if "[ADK_EVENT]" not in message:
+            return True
+        match = _ADK_EVENT_METADATA.fullmatch(message)
+        record.msg = (
+            f"[ADK_EVENT] author={match[1]}, partial={match[2]}, turn_complete={match[3]}"
+            if match else "[ADK_EVENT] metadata unavailable"
+        )
+        record.args = ()
+        record.message = record.msg
+        record.exc_info = record.exc_text = record.stack_info = None
+        return True
+
+
+logging.getLogger("ag_ui_adk.adk_agent").addFilter(_AdkEventContentFilter())
 
 load_dotenv(pathlib.Path(__file__).parent / "social_poster" / ".env")
 
 from backend.social_poster import db  # noqa: E402  (needs .env first)
 from backend.social_poster.agent import root_agent  # noqa: E402  (needs .env first)
+from backend.social_poster.guardrails import MODEL_ARMOR_ENABLED  # noqa: E402
+from backend.social_poster.guardrails import PII_REDACTION  # noqa: E402
+from backend.pii_middleware import RedactUserMessages  # noqa: E402
 
 app = FastAPI(title="social-agent AG-UI backend")
+
+if PII_REDACTION:
+    # add_middleware prepends: register first so CORS wraps boundary errors too.
+    app.add_middleware(RedactUserMessages, path="/api/adk")
 
 app.add_middleware(
     CORSMiddleware,
@@ -54,10 +95,19 @@ if app_url:
         agent_engine_id=runtime_resource["engine"],
     )
 
+def _run_config_factory(input: RunAgentInput) -> RunConfig:
+    # Retain the bridge's artifact/context defaults and change only streaming.
+    config = adk_agent._default_run_config(input)
+    if MODEL_ARMOR_ENABLED or PII_REDACTION:
+        config.streaming_mode = StreamingMode.NONE
+    return config
+
+
 adk_agent = ADKAgent(
     adk_agent=root_agent,
     app_name="social_poster",
     user_id="devcamp-user",  # single-user POC; extract from auth in real apps
+    run_config_factory=_run_config_factory,
     session_service=session_service,
     memory_service=memory_service,
     # Recover threads from stored state; arbitrary thread IDs may not be valid

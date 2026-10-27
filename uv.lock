@@ -7,6 +7,14 @@ resolution-markers = [
     "sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 
+[manifest]
+
+[[manifest.dependency-metadata]]
+name = "rouge-score"
+version = "0.1.2"
+requires-dist = ["absl-py", "nltk", "numpy", "six>=1.14.0"]
+requires-python = ">=3.7"
+
 [[package]]
 name = "a2a-sdk"
 version = "0.3.26"
@@ -849,6 +857,22 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/a8/dd/1eef226e470369b26824a505c34482c0b493bc35fe8e0c6b003b5feca21a/google_cloud_core-2.6.0.tar.gz", hash = "sha256:e76149739f90fac1fc6757c09f47eaccb3145b54adbd7759b0f7c4b235f46c83", size = 36001, upload-time = "2026-05-07T08:04:04.124Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/84/4a/98da8930ab109c73d9a5d13782a9ebb81ea8c111f6d534a567b71d23e52b/google_cloud_core-2.6.0-py3-none-any.whl", hash = "sha256:6d63ac8e5eca6d9e4319d0a1e2265fadcd7f1049904378caecfa01cf52dd869e", size = 29390, upload-time = "2026-05-07T08:02:34.672Z" },
+]
+
+[[package]]
+name = "google-cloud-dlp"
+version = "3.40.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "google-api-core", extra = ["grpc"] },
+    { name = "google-auth" },
+    { name = "grpcio" },
+    { name = "proto-plus" },
+    { name = "protobuf" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c5/cb/a32cab31feba7b60dad41dedbdc1d5445d39fa151761e6730a7782fee036/google_cloud_dlp-3.40.0.tar.gz", hash = "sha256:f2a42ab5c59a14f487b2c6e2a9d4c090c6a8bd2f58c5fbb0387dcfe9fb2beae7", size = 291646, upload-time = "2026-10-01T18:16:19.151Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5d/2e/c4fecdaf110cddb43fd96dbf88dc6a38ed13accf8c0cffe0719ee5047ebf/google_cloud_dlp-3.40.0-py3-none-any.whl", hash = "sha256:ba99d17d9b2e95b00d1c30e5dd82e755538353ac46e93ef01db4fb616ad0e0ef", size = 232514, upload-time = "2026-10-01T18:09:58.35Z" },
 ]
 
 [[package]]
@@ -2226,8 +2250,8 @@ name = "secretstorage"
 version = "3.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "cryptography", marker = "sys_platform != 'emscripten' and sys_platform != 'win32'" },
-    { name = "jeepney", marker = "sys_platform != 'emscripten' and sys_platform != 'win32'" },
+    { name = "cryptography" },
+    { name = "jeepney" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/1c/03/e834bcd866f2f8a49a85eaff47340affa3bfa391ee9912a952a1faa68c7b/secretstorage-3.5.0.tar.gz", hash = "sha256:f04b8e4689cbce351744d5537bf6b1329c6fc68f91fa666f60a380edddcd11be", size = 19884, upload-time = "2025-11-23T19:02:53.191Z" }
 wheels = [
@@ -2261,6 +2285,7 @@ dependencies = [
     { name = "fastapi" },
     { name = "fastmcp" },
     { name = "google-adk", extra = ["a2a", "eval"] },
+    { name = "google-cloud-dlp" },
     { name = "google-cloud-storage" },
     { name = "google-genai" },
     { name = "httpx" },
@@ -2279,6 +2304,7 @@ requires-dist = [
     { name = "fastapi", specifier = "==0.139.0" },
     { name = "fastmcp", specifier = "==3.4.4" },
     { name = "google-adk", extras = ["a2a", "eval"], specifier = "==2.4.0" },
+    { name = "google-cloud-dlp", specifier = "==3.40.0" },
     { name = "google-cloud-storage", specifier = "==3.13.0" },
     { name = "google-genai", specifier = "==2.11.0" },
     { name = "httpx", specifier = "==0.28.1" },

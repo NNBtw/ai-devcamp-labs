@@ -1,0 +1,44 @@
+# Agent Runtime uploads from the repository root.
+.gcloudignore
+.git/
+.gitignore
+#!include:.gitignore
+
+# The frontend has its own deployment context and exclusions.
+frontend/
+
+# Environment files and local authentication configuration.
+.env*
+**/.env*
+.npmrc
+**/.npmrc
+.yarnrc*
+**/.yarnrc*
+*.pem
+**/*.pem
+*.key
+**/*.key
+*.p12
+**/*.p12
+*.pfx
+**/*.pfx
+*credentials*.json
+**/*credentials*.json
+service-account*.json
+**/service-account*.json
+service_account*.json
+**/service_account*.json
+.config/
+.ssh/
+.aws/
+
+# Local deployment state and generated dependencies/output.
+deployment_metadata.json*
+.adk/
+.agents/
+.claude/
+.codex/
+**/node_modules/
+**/.next/
+**/__pycache__/
+**/*.pyc
